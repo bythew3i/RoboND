@@ -1,3 +1,5 @@
 # RoboND
 
-- gazebo 9.0.0
+- Ubuntu 20.04 LTS
+- ROS Noetic
+- gazebo 11.9.1
