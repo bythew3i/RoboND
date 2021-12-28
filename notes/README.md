@@ -135,6 +135,25 @@ export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:/home/workspace/myrobot/build
 
 
 
+## RViz
+
+- stands for ROS Visualization (Gazebo is a physics simulator)
+- can visualize any type of sensor data (can be live-stream or bagfile)
+
+```bash
+roscore
+```
+
+```bash
+# run rviz node in rviz pkg
+# rosrun package_name executable_name
+rosrun rviz rivz
+```
+
+
+
+
+
 ## ROS
 
 ### History
@@ -147,8 +166,76 @@ export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:/home/workspace/myrobot/build
 
 ### Topic vs. Service
 
-- **Topic**: massage passing through subscriber / publisher
-- **Service**: massage passing through request / response
+#### Topic
+
+- massage passing through **subscriber / publisher**
+
+  - define mesaage type in `.msg` file, i.e.: /msg/xxx,msg
+
+    ```
+    fieldtype1 fieldname1
+    fieldtype2 fieldname2
+    fieldtype3 fieldname3
+    ```
+
+  - Publisher C++ format
+
+    ```cpp
+    // queue_size: can store msg until being sent; exceeding will drop oldest
+    ros::Publisher pub1 = n.advertise<message_type>("/topic_name", queue_size);
+    ```
+  
+  - Subscriber C++ format
+  
+    ```cpp
+    ros::Subscriber sub1 = n.subscribe("/topic_name", queue_size, callback_function);
+    ```
+  
+    
+
+#### Service
+
+- **Service**: massage passing through **request / response**
+
+  - define message type in `.srv` file, i.e: /srv/xxx.srv
+
+    ```
+    #request constants
+    int8 FOO=1
+    int8 BAR=2
+    #request fields
+    int8 foobar
+    another_pkg/AnotherMessage msg
+    ---
+    #response constants
+    uint32 SECRET=123456
+    #response fields
+    another_pkg/YetAnotherMessage val
+    CustomMessageDefinedInThisPackage value
+    uint32 an_integer
+    ```
+
+  - Server c++ format
+
+    ```cpp
+    ros::ServiceServer service = n.advertiseService(`service_name`, handler);
+    ```
+    
+  - Client c++ format
+  
+    ```c++
+    ros::ServiceClient client = n.serviceClient<package_name::service_file_name>("service_name");
+    ```
+
+  - Client call Server on Command Line
+
+    ```bash
+    rosservice call service_name “request”
+    ```
+
+  
+  
+
 
 
 
@@ -254,6 +341,40 @@ rostopic echo /turtle1/cmd_vel
 
 
 
+### URDF
+
+- Unified Robot Description Format
+
+- XML markup language
+
+```xml
+<?xml version="1.0"?>
+<robot name="two_link_robot">
+  <!--Links-->
+  <link name="link_1">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_2">
+    <visual>
+      <geometry>
+        <box size="0.6 0.1 0.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <!--Joints-->
+  <joint name="joint_1" type="continuous">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+  </joint>
+</robot>
+```
+
+
+
 ## Catkin
 
 ### Workspace
@@ -355,4 +476,6 @@ rosdep check <package name>
 
 rosdep install -i <package name>
 ```
+
+
 
