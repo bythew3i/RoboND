@@ -135,7 +135,7 @@ export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:/home/workspace/myrobot/build
 
 
 
-## RViz
+### RViz
 
 - stands for ROS Visualization (Gazebo is a physics simulator)
 - can visualize any type of sensor data (can be live-stream or bagfile)
@@ -478,4 +478,197 @@ rosdep install -i <package name>
 ```
 
 
+
+## Localization
+
+### Algorithms
+
+- Extended Kalman Filter (EKF)
+- Markov Localization
+- Grid Localization
+- Monte Carlo Localization (MCL)
+
+### Problems
+
+- Position Tracking (easiest) -- AKA Local Localization
+  - Know init pose
+  - Estimate pose as moving
+- Global Localization
+  - Unknown init pose
+  - Determine pose relative to the ground truth map
+- Kidnapped Robot (most difficult)
+  - Similar to Global Localization but may be kidnapped
+  - Teach itself to recover and correctly relocate
+
+
+
+## Kalman Filter
+
+> The Kalman Filter can only be applied to states that are represented by a Gaussian distribution. 
+
+![kalman](kalman.png)
+
+![kal2](kal2.png)
+
+
+
+### Common Types
+
+- KF - linear
+- Extended Kalman Filter: EKF - nonlinear 
+- Unscented Kalman Filter: UKF - highly nonlinear
+
+
+
+### 1D Gaussian
+
+#### Formulas
+
+The probability that a random variable, x, will take a value between $x_1$ and $x_2$ is given by the integral of the function from $x_1$ to $x_2$.
+
+$p(x_1 < x < x_2) = \int_{x_1}^{x_2} f_x(x)dx$
+
+Mean: $\mu$
+
+Variance: $\sigma^2$
+
+
+
+Gaussian Distribution Formula
+
+$p(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$
+
+$\int p(x)dx = 1$
+
+
+
+#### Variable Naming Conventions
+
+- $x_t:state$
+- $z_t: measurement$
+- $u_t: control action$
+
+
+
+#### Measurement Update
+
+![img](c2l2-graph-3.png)
+
+
+
+Prior Belief: $\mu_1$ (Mean), $\sigma_1^2$ (Variance)
+
+Measurement:  $\mu_2$ (Mean), $\sigma_2^2$ (Variance)
+
+Posterior Belief:
+
+$\mu = \frac{\sigma_2^2}{\sigma_1^2+\sigma_2^2}\mu_1 + \frac{\sigma_1^2}{\sigma_1^2+\sigma_2^2}\mu_2$
+
+- Because $\sigma_1^2 > \sigma_2^2$ and  $\mu_2$ is real measurement and we need to give it more weight.
+
+$\frac{1}{\sigma^2} = \frac{1}{\sigma_1^2} + \frac{1}{\sigma_2^2}$
+
+- $\sigma^2 < min(\sigma_1^2,\sigma_2^2)$ : our new state estimate is more confident than our prior belief and our measurement
+
+#### State Prediction
+
+Motion to perform: $\mu_d$ and $\sigma^2_d$
+
+New prior belief from previous Measurement Update step: $\mu_b$ and $\sigma^2_b$
+
+$\mu = \mu_b + \mu_d$
+
+$\sigma^2 = \sigma^2_b + \sigma^2_d$
+
+
+
+### Multivariate Gaussians
+
+#### Formulas
+
+Mean: $\mu = \begin{bmatrix}\mu_x \\ \mu_y\end{bmatrix}$
+
+Covariance: $\sum = \begin{bmatrix}\sigma^2_x & \sigma_x\sigma_y \\ \sigma_y\sigma_x & \sigma_y^2\end{bmatrix}$
+
+- $\sigma_x^2$ and $\sigma_y^2$ are variance
+- $\sigma_x\sigma_y $ and $ \sigma_y\sigma_x $ are correlation terms
+  - $\sigma_x\sigma_y == \sigma_y\sigma_x $ 
+  - if non-zero, the Gaussian function looks 'skewed'
+
+
+
+Mutivariate Gaussian: 
+
+$p(x) = \frac{1}{(2\pi)^\frac{D}{2}\abs{\sum}^\frac{1}{2}}e^{-\frac{1}{2}(x-\mu)^T\sum^{-1}(x-\mu)}$
+
+$D$ is dimention. If $D=1$, it is same as 1-D Gaussian formula.
+
+#### State Prediction
+
+Notation:
+
+- $x'$: predicted next state
+- $x$: current state
+- $F$: state transition function (cur state -> next state)
+- $P'$: predicted next covariance
+- $P$: current corvariance
+- $Q$: noise
+
+Mean Equation: 
+
+- $x' = Fx$
+- For example, an object is moving with constant acceleration: 
+  - $x = \begin{bmatrix}p\\v\\a\end{bmatrix}$
+  - $F = \begin{bmatrix}1&&\Delta{t}&&\frac{1}{2}\Delta{t}^2\\0&&1&&\Delta{t}\\0&&0&&1\end{bmatrix}$
+  - $x' = \begin{bmatrix}p+x\Delta{t}+\frac{1}{2}a\Delta{t}^2\\v+v\Delta{t}\\a\end{bmatrix}$
+
+Covariance Equation:
+
+>  If you multiply the state $x$ by $F$, the covariance will be affect by **the square of matrix** $F$ ($FF^T$)
+
+- $P' = FPF^T + Q$
+
+#### Measurement Update
+
+Notation:
+
+- $z$: measurement (observation)
+- $x'$: predicted next state
+- $H$: Measurement Function (state -> measurement)
+- $H^{-1}$: Measurement Function Inverse (measurement -> state)
+- $y$: measurement residual 
+- $P'$: predicted next covariance
+- $S$: used to calculate Kalman Gain
+- $R$: measurement noise
+
+Equations:
+
+- $y = z - Hx'$
+- $S = HP'H^T+R$
+
+#### Kalman Gain
+
+Kalman Gain determines how much weight should be place on the state prediction and measurement update (depends on the noise). In other words, it is an averaging factor depending on the uncertainty of the state prediction and measurement update.
+
+Notation:
+
+- $K$: Kalman Gain
+- $x$: new current state 
+- $x'$: predicted next state (predicted new current state)
+- $y$: measurement residual
+
+Kalman Gain Equation:
+
+- $K = P'H^TS^{-1}$
+
+Posterior State and Covariance Equation:
+
+- $x = x' + Ky$ 
+- $P = (I - KH) P'$
+
+Perfect Measurements Example:
+
+
+
+Negligible Measurements Example:
 
