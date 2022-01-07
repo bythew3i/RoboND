@@ -692,3 +692,6 @@ Kalman Gain Visulization: determines how much weight between Measurement Update 
 
 ![kalmanGain](kalmanGain.png)
 
+
+
+## Extended Kalman Filter
