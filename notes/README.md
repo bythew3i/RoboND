@@ -582,7 +582,7 @@ $\sigma^2 = \sigma^2_b + \sigma^2_d$
 
 
 
-### Multivariate Gaussians
+### [Multivariate](https://github.com/bythew3i/RoboND.git) Gaussians
 
 #### Formulas
 
@@ -668,7 +668,27 @@ Posterior State and Covariance Equation:
 
 Perfect Measurements Example:
 
+- $R = \begin{bmatrix}0&...&0\\...&...&...\\0&...&0\end{bmatrix} = \begin{bmatrix}0\end{bmatrix}$ (noise = 0 and measurement is 100% accurate)
+- $S = HP'H^T+R = HP'H^T$
+- $ K = P'H^TS^{-1} = P'H^T(HP'H^T)^{-1} = H^{-1}$
+- $x = x' + Ky = x' + H^{-1}y = x' + H^{-1}(z-Hx') = H^{-1}z$
 
+> `new_current_state` = `measurement2state(measurent)`  
+>
+> In this perfect measurement example, we are only using our measurement to update proterior state.
 
 Negligible Measurements Example:
+
+- $R = \begin{bmatrix}\infty&...&\infty\\...&...&...\\\infty&...&\infty\end{bmatrix} = \begin{bmatrix}\infty\end{bmatrix}$ (measurement is not reliable, and uncertainty is as high as possible)
+- $S = HP'H^T+R = \begin{bmatrix}\infty\end{bmatrix}$
+- $ K = P'H^TS^{-1} = P'H^T(\infty)^{-1} = 0$
+- $x = x' + Ky = x'$
+
+> `new_current_state` = `predicted next state`
+>
+> In this negligible measurement example, the measurement is not included at all because it is unreliable. The posterior state is euqal to state prediction.
+
+Kalman Gain Visulization: determines how much weight between Measurement Update and State Prediction:
+
+![kalmanGain](kalmanGain.png)
 
