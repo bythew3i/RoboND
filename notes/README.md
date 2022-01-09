@@ -4,7 +4,7 @@
 
 ## Gazebo 
 
-> `gazebo` = `gzserver` + `gzclient`
+`gazebo` = `gzserver` + `gzclient`
 
 ### Gazebo Server
 
@@ -582,7 +582,7 @@ $\sigma^2 = \sigma^2_b + \sigma^2_d$
 
 
 
-### [Multivariate](https://github.com/bythew3i/RoboND.git) Gaussians
+### Multivariate Gaussians
 
 #### Formulas
 
@@ -694,4 +694,28 @@ Kalman Gain Visulization: determines how much weight between Measurement Update 
 
 
 
-## Extended Kalman Filter
+### Extended Kalman Filter
+
+Kalman Filter Assumption:
+
+- Motion and Measurement models are linear
+- State space can be represented by a unimodal Gaussian distribution
+
+But, real world problem is non-linear (e.g. move in a circle)
+
+A nonlinear function can be used to update the mean of a function:
+
+- $\mu \xrightarrow{f(x)} \mu'$
+
+To update the variance, the Extended Kalman Filter linearizes the nonlinear function f(x) over a small section and calls it F:
+
+- $P \xrightarrow{F} P'$
+
+The linear approximation can be obtained by using the first two terms of the **Taylor Series** of the function centered around the mean:
+
+- $F = f(\mu) + \frac{\delta f(\mu)}{\delta x}(x-\mu)$
+
+ First two terms of Linearization in Multiple Dimensions Tarlor Series:
+
+- $\large T(x) = f(a) + (x-a)^T\nabla{f(a)}$
+
