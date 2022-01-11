@@ -694,7 +694,7 @@ Kalman Gain Visulization: determines how much weight between Measurement Update 
 
 
 
-### Extended Kalman Filter
+### Extended Kalman Filter (EKF)
 
 Kalman Filter Assumption:
 
@@ -718,4 +718,47 @@ The linear approximation can be obtained by using the first two terms of the **T
  First two terms of Linearization in Multiple Dimensions Tarlor Series:
 
 - $\large T(x) = f(a) + (x-a)^T\nabla{f(a)}$
+
+
+
+## Monte Carlo Localization (MCL)
+
+MCL can only solve Local and Global Localization Problem
+
+### Bayes Filters
+
+> Robot can estimate the **state** of a **dynamical system** from sensor **measurements**
+
+$Bel(x_t) = P(X_t|Z_{1...t})$
+
+- $Bel$: The probability density, AKA posterior, is called belief 
+- $X_t$ : State at time t
+- $Z_{1...t}$: Measurement
+- Recall: $\large P(A|B) = \frac{P(B|A)*P(A)}{P(B)} = \frac{P(B|A)*P(A)}{P(A)*P(B|A) + P(\neg A)*P(B|\neg A)}$
+
+### MCL Algorithms
+
+![mcl](mcl.png)
+
+Steps:
+
+1. Previous Belief
+2. Motion Update
+3. Measurement Update
+4. Resampling
+5. New Belief
+
+
+
+### MCL vs EKF
+
+![c2-l4-a03](c2-l4-a03.png)
+
+![mct-sim](mct-sim.png)
+
+![mcl-sim-txt](mcl-sim-txt.png)
+
+![ekf-sim](ekf-sim.png)
+
+![ekf-sim-txt](ekf-sim-txt.png)
 
