@@ -9,5 +9,7 @@ catkin_init_workspace
 cd ..
 catkin_make
 source devel/setup.zsh
+
 roslaunch my_robot world.launch
+roslaunch my_robot amcl.launch
 ```

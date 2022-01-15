@@ -10,4 +10,5 @@ cd ..
 catkin_make
 source devel/setup.zsh
 roslaunch my_robot world.launch
+roslaunch ball_chaser ball_chaser.launch
 ```
