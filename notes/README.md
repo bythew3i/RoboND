@@ -762,3 +762,54 @@ Steps:
 
 ![ekf-sim-txt](ekf-sim-txt.png)
 
+## SLAM
+
+SLAM: Simultaneous Localization And Mapping
+
+### Localization vs. Mapping
+
+|                | Localization       | Mapping            |
+| -------------- | ------------------ | ------------------ |
+| **Assumption** | Known Map          | Robot's Trajectory |
+| **Estimation** | Robot's Trajectory | Map                |
+
+
+
+### Occupancy Grid Mapping Algorithm
+
+**Discrete Data**:  the data is obtained by counting. e.g. Number of robots in a room
+
+**Continuous Data**: the data is obtained by measuring it.  e.g., weight of a robot
+
+
+
+Notations:
+
+- $x$: estimation
+- $z$: measurement
+- $m$: map
+- $u$: control
+
+| Robotic Problems | Probability Equations              |
+| ---------------- | ---------------------------------- |
+| Localization     | $P(x_{1:t}|u_{1:t}, m, z_{1:t})$   |
+| Mapping          | $P(m | z_{1:t}, x_{1:t})$          |
+| SLAM             | $P(x_{1:t}, m | z_{1:t}, u_{1:t})$ |
+
+
+
+**Forward Measurement Model**:
+
+- $P(z_{1:t} | x)$: Estimating a posterior over the measurement given the system state
+
+**Inverse Measurement Model**:
+
+- $P(x | z_{1:t})$: Estimating a posterior over the system state given the measurement
+- Used when measurement is more complex than the system state. e.g. use camera to tell if the door is open
+
+
+
+**Binary Bayes Filter**
+
+![l2c9-01](l2c9-01.png)
+
