@@ -813,3 +813,51 @@ Notations:
 
 ![l2c9-01](l2c9-01.png)
 
+
+
+**De Morgan's Law**
+
+![demorgan](demorgan.png)
+
+
+
+
+
+### Online SLAM vs Full SLAM
+
+![slam-tree](slam-tree.jpg)
+
+**Online SLAM**:  $P(x_t, m | z_{1:t}, u_{1:t})$
+
+- Solve the posterior represented by the Instantaneous pose $x_t$ and the map $m$ given all the measurements $z_{1:t}$ and controls $u_{1:t}$
+
+- with Online SLAM, we estimate variables that occur at time t only
+
+
+
+**Full SLAM**: $P(x_{1:t}, m | z_{1:t}, u_{1:t})$
+
+- Solve the posterior represented by the robot's trajectory $x_{1:t}$ and the map $m$ given all the measurements $z_{1:t}$ and control $u_{1:t}$
+- with Full SLAM. we estimate all the variables that occur throughout the robot travel time
+
+
+
+![online-full-slam](online-full-slam.png)
+
+![full2online](full2online.png)
+
+
+
+### Fast SLAM
+
+FastSLAM algorithm can solve the full SLAM problem with known correspondences with MCL + low-dimensional EKF
+
+
+
+### Graph SLAM
+
+#### Maximum Likelihood Estimation (MLE)
+
+- **Probability** tries to estimate the outcome given the parameters.
+
+- **Likelihood** tries to estimate the parameters that best explain the outcome.
