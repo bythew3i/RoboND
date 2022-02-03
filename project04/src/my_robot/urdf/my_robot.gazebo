@@ -68,7 +68,7 @@
             <Cx>0.0</Cx>
             <Cy>0.0</Cy>
             <focalLength>0.0</focalLength>
-            </plugin>
+          </plugin>
     </sensor>
   </gazebo>
 
