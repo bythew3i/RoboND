@@ -861,3 +861,136 @@ FastSLAM algorithm can solve the full SLAM problem with known correspondences wi
 - **Probability** tries to estimate the outcome given the parameters.
 
 - **Likelihood** tries to estimate the parameters that best explain the outcome.
+
+
+
+## Path Planning
+
+Input:
+
+- Environment Geometry
+- Robot Geometry
+- Start Pose of Robot
+- Goal Pose of Robot
+
+Output:
+
+- Path from start to goal
+
+
+
+### Discrete Planning
+
+Discretize the workspace into connected graph, then apply a graph-search algo to calculate the best path.
+
+![discrete-planning](discrete-planning.png)
+
+Pros:
+
+- Elegant, Precise, thorough, 
+- Best suited for low-dim problems
+
+Cons:
+
+- Computationally expensive, 
+- Not good for high-dim problems
+
+
+
+### Sample-Based Planning
+
+Takes a number of samples and uses them to build a discrete representation of the ws.
+
+![samplebased-planning](samplebased-planning.png) 
+
+Pros:
+
+- quick
+
+Cons:
+
+- Not precise
+
+
+
+### Probabilistic Path Planning
+
+Also takes into account the uncertainty of the robot's motion.
+
+![prob-planning](prob-planning.png)
+
+Pros:
+
+- Helpful in highly-contrained environment / env with senstivie and high risk areas
+
+
+
+#### Markov Decision Process
+
+Definition
+
+- A set of states: $S$
+- Initial state: $s_0$
+- A set of actions: $A$
+- The transition model: $T(s, a, s')$
+- A set of rewards: $R$
+
+Solution to a MDP is called policy.
+
+- Mapping from states to actions
+
+- An optimal policy: $\pi^*$
+
+Utility of a state:
+
+- $U^\pi(s) = E[\sum_{t=0}^{\infin}R(s_t) | \pi. s_0=s]] = R(s) + U^\pi(s')$
+- $U^\pi(s)$: the utility of a state $s$
+- $E$: the expected value
+- $R(s)$: the reward for state $s$
+- Since the future could be quite uncertain: we will have discounting rate $\gamma^t$ ($\gamma^0=1$)
+  - $U^\pi(s) = E[\sum_{t=0}^{\infin}\gamma^t R(s_t) | \pi. s_0=s]] = R(s) + U^\pi(s')$
+
+
+
+#### Value Iteration Algorithm
+
+
+
+
+
+### Minkowski Sum
+
+![minkowski](minkowski.png)
+
+
+
+
+
+### Discretization
+
+- Roadmap
+- Cell Decomposition
+- Gradient Field
+
+
+
+### Graph Search
+
+Uninformed Search
+
+- Not provide any info about the the goal
+- Example:
+  - BFS
+  - DFS
+  - Uniform Cost Search
+
+Informed Search
+
+- Provide with info to the goal
+
+- Example:
+
+  - A* Search
+
+  
+
