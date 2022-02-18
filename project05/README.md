@@ -3,7 +3,14 @@
 > !!! This project has been only tested in a specific environment:
 > - OS: Ubuntu 16.04.6 LTS
 > - ROS: kinetic
-> 
+
+
+## Sync Submodules
+Please make sure to load submodules
+
+```bash
+git submodule update --init --recursive
+```
 
 
 ## Setup
